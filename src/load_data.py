@@ -29,5 +29,7 @@ class DataLoader:
 
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(X, Y, test_size=0.3, random_state=42)
 
+
+
     def get_data(self):
         return self.X_train, self.X_test, self.Y_train, self.Y_test

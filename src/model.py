@@ -3,7 +3,6 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
 from xgboost import XGBRegressor
-import numpy as np
 
 class Model:
     def __init__(self, model_type='linear', params=None):
