@@ -1,1 +1,4 @@
 pandas
+xgboost
+numpy
+scikit-learn

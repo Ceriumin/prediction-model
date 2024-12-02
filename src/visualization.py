@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 class Visualize:
 
@@ -14,4 +16,18 @@ class Visualize:
         plt.legend()
         plt.grid(True)
         plt.show()
+
+    # Bar chart diagram suggesting the importance of specific columns in the dataset
+    def plot_importance(self, model, names):
+        importances = model.feature_importances_
+        indices = np.argsort(importances)[::-1]
+
+        plt.figure(figsize=(10, 6))
+        plt.title('Feature Importance')
+        plt.bar(range(len(names)), importances[indices])
+        plt.xticks(range(len(importances)), [names[i] for i in indices], rotation=90)
+        plt.tight_layout
+        plt.show()
+
+
 

@@ -2,6 +2,10 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import cross_val_score
+
+
+
 from xgboost import XGBRegressor
 
 class Model:
@@ -14,6 +18,8 @@ class Model:
             self.model = RandomForestRegressor(random_state=42, n_jobs=-1, **params)
         elif model_type == 'xgboost':
             self.model = XGBRegressor(objective='reg:squarederror', random_state=42)
+
+
         else:
             raise ValueError('Invalid model type')
 
@@ -25,16 +31,21 @@ class Model:
 
 
     def evaluate(self, X_test, Y_test):
-        return {
-            'mse': mean_squared_error(Y_test, self.predict(X_test)),
-            'r2': r2_score(Y_test, self.predict(X_test))
-        }
+        Y_pred = self.predict(X_test)
+        mse = mean_squared_error(Y_test, Y_pred)
+        r2 = r2_score(Y_test, Y_pred)
+        return mse, r2
 
     def tune_hyperparameters(self, X_train, Y_train, param_grid):
         grid_search = GridSearchCV(self.model, param_grid, cv=5, scoring='r2')
         grid_search.fit(X_train, Y_train)
         self.model = grid_search.best_estimator_
         return grid_search.best_params_
+
+    def cross_validate(self, model, X, Y):
+        scores = cross_val_score(model, X, Y, cv=5, scoring='r2')
+        return scores.mean(), scores.std()
+
 
 
 
