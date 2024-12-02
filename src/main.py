@@ -1,5 +1,3 @@
-import tensorflow as tf
-
 from load_data import DataLoader
 from model import Model
 from visualization import Visualize
@@ -54,15 +52,6 @@ def xgBoost(X_train, Y_train, X_test, Y_test, visualize):
     feature_names = X_train.columns.tolist()
     visualize.plot_importance(xgb_model.model, feature_names)
 
-def neuralNetwork(X_train, Y_train, X_test, Y_test, visualize):
-
-
-    print("\033[1;4mNeural Network Evaluation\033[0m\n")
-    print(f"R2 Score: {r2} \nMean Score: {mean}")
-    print(f"Cross Validation Score: {mean_score} \nStandard Deviation: {stf_dev}")
-    print("\n")
-    visualize.plot_scatter(Y_test, sq.predict(X_test))
-
 def main():
 
     filepath = '../data/data.csv'
@@ -78,7 +67,6 @@ def main():
     viz = Visualize()
 
     linearRegression(X_train, Y_train, X_test, Y_test, viz)
-    neuralNetwork(X_train, Y_train, X_test, Y_test, viz)
     # randomForest(X_train, Y_train, X_test, Y_test, viz)
     # xgBoost(X_train, Y_train, X_test, Y_test, viz)
 
