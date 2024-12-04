@@ -1,10 +1,9 @@
 from load_data import DataLoader
 from model import Model
 from visualization import Visualize
-import time
 
-# Function which handles the linear regression model
-def linearRegression(X_train, Y_train, X_test, Y_test, visualize):
+'''Linear Regression Model'''
+def linear(X_train, Y_train, X_test, Y_test, visualize):
     name = "Linear Regression"
     model = Model(model_type='linear')
 
@@ -12,9 +11,12 @@ def linearRegression(X_train, Y_train, X_test, Y_test, visualize):
     model.evaluate(X_test, Y_test, name)
     visualize.plot_scatter(Y_test, model.predict(X_test), name)
 
-def randomForest(X_train, Y_train, X_test, Y_test, visualize):
+'''Random Forest Regressor Ensemble'''
+def forest(X_train, Y_train, X_test, Y_test, visualize):
     name = "Random Forest"
+    # Stock model is initialized here
     model = Model(model_type='random_forest')
+    # Tuned parameter grid for hyperparameters
     param_grid = {
         'n_estimators': [100,200, 300],
         'max_depth': [None, 10, 20, 30],
@@ -26,10 +28,11 @@ def randomForest(X_train, Y_train, X_test, Y_test, visualize):
 
     model.evaluate(X_test, Y_test, name)
     # visualize.plot_scatter(Y_test, rf_model.predict(X_test))
-    #feature_names = X_train.columns.tolist()
-    #visualize.plot_importance(rf_model.model, feature_names)
+    # feature_names = X_train.columns.tolist()
+    # visualize.plot_importance(rf_model.model, feature_names)
 
-def xgBoost(X_train, Y_train, X_test, Y_test, visualize):
+'''XGBoost Gradient Regressor Ensemble'''
+def xg(X_train, Y_train, X_test, Y_test, visualize):
     name = "XGBoost"
     model = Model(model_type='xgboost')
     model.train(X_train, Y_train)
@@ -39,22 +42,23 @@ def xgBoost(X_train, Y_train, X_test, Y_test, visualize):
     # feature_names = X_train.columns.tolist()
     # visualize.plot_importance(xgb_model.model, feature_names)
 
-def combined(X_train, Y_train, X_test, Y_test, visualize):
+'''Regression Stacking Ensemble'''
+def stack(X_train, Y_train, X_test, Y_test, visualize):
     name = "Stacking Ensemble"
-    model = Model(model_type='all')
+    model = Model(model_type='stack')
     model.train(X_train, Y_train)
 
     model.evaluate(X_test, Y_test, name)
     visualize.plot_scatter(Y_test, model.predict(X_test))
 
-def keras(X_train, Y_train, X_test, Y_test, visualize):
+'''Keras Neural Network'''
+def neural(X_train, Y_train, X_test, Y_test, visualize):
     name = "Neural Network"
     model = Model(model_type='keras')
     model.model.fit(X_train, Y_train, epochs=100, batch_size=32, validation_data=(X_test, Y_test), verbose=0)
 
     model.evaluate(X_test, Y_test, name)
     visualize.plot_scatter(Y_test, model.predict(X_test))
-
 
 def main():
     filepath = '../data/data.csv'
@@ -69,12 +73,13 @@ def main():
 
     viz = Visualize()
 
-    linearRegression(X_train, Y_train, X_test, Y_test, viz)
-    # combined(X_train, Y_train, X_test, Y_test, viz)
-    # keras(X_train, Y_train, X_test, Y_test, viz)
-    randomForest(X_train, Y_train, X_test, Y_test, viz)
-    # xgBoost(X_train, Y_train, X_test, Y_test, viz)
+    linear(X_train, Y_train, X_test, Y_test, viz)
+    forest(X_train, Y_train, X_test, Y_test, viz)
+    xg(X_train, Y_train, X_test, Y_test, viz)
+    neural(X_train, Y_train, X_test, Y_test, viz)
+    stack(X_train, Y_train, X_test, Y_test, viz)
 
+# Initializes the main method which is the entrypoint
 if __name__ == "__main__":
     main()
 

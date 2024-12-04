@@ -4,13 +4,15 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
-from xgboost import XGBRegressor
+
 # the import is glitched and comes up as an error
 from tensorflow import keras
 from tensorflow.keras import layers
 
+from xgboost import XGBRegressor
 
 class Model:
+    # Returns the model based off the input provided for simplicity and any parameters
     def __init__(self, model_type='linear', params=None):
         if model_type == 'linear':
             self.model = LinearRegression()
@@ -31,6 +33,7 @@ class Model:
             stacked_model = StackingRegressor(estimators=base_models, final_estimator=meta_model)
             self.model = stacked_model
 
+        # Neural Network with preset parameters, 64 seems to be the most optimized value for density
         elif model_type == 'keras':
             self.model = keras.Sequential([
                 layers.Input(shape=(9,)),
@@ -48,7 +51,7 @@ class Model:
     def predict(self, X_test):
         return self.model.predict(X_test)
 
-
+    # Evaluation in a Human Readable Format 
     def evaluate(self, X_test, Y_test, model):
         Y_pred = self.predict(X_test)
         mse = mean_squared_error(Y_test, Y_pred)
@@ -58,6 +61,7 @@ class Model:
         print(f"\n\033[1;4m{model} Evaluation\033[0m")
         print(f"\nR2 Score: {r2} \nMean Squared Error: {mse}\nMean Absolute Error: {mae}")
 
+    # Hyperparameter tuning function is stored here
     def tune_hyperparameters(self, X_train, Y_train, param_grid):
         grid_search = GridSearchCV(self.model, param_grid, cv=5, scoring='r2')
         grid_search.fit(X_train, Y_train)

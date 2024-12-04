@@ -18,6 +18,7 @@ class Visualize:
         plt.show()
 
     # Bar chart diagram suggesting the importance of specific columns in the dataset
+    # Shows which columns contribute to the most accurate predictions
     def plot_importance(self, model, names):
         importances = model.feature_importances_
         indices = np.argsort(importances)[::-1]
@@ -28,6 +29,7 @@ class Visualize:
         plt.xticks(range(len(importances)), [names[i] for i in indices], rotation=90)
         plt.tight_layout
         plt.show()
+
 
 
 
