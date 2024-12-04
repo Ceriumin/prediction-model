@@ -10,6 +10,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 from xgboost import XGBRegressor
+from evaluate import Visualize
 
 class Model:
     # Returns the model based off the input provided for simplicity and any parameters
@@ -22,7 +23,7 @@ class Model:
             self.model = RandomForestRegressor(random_state=42, n_jobs=-1, **params)
         elif model_type == 'xgboost':
             self.model = XGBRegressor(objective='reg:squarederror', random_state=42)
-        elif model_type == 'all':
+        elif model_type == 'stack':
             base_models = [
                 ('linear', LinearRegression()),
                 ('rf', RandomForestRegressor(n_estimators=100)),
@@ -69,8 +70,12 @@ class Model:
         return grid_search.best_params_
 
     def cross_validate(self, model, X, Y):
-        scores = cross_val_score(model, X, Y, cv=5, scoring='r2')
-        return scores.mean(), scores.std()
+        scores = cross_val_score(model, X, Y, cv=10, scoring='r2')
+        mean = scores.mean()
+        std = scores.std()
+
+        print(f"Cross Validation: {mean}\nStandard Deviation: {std}")
+        return scores
 
 
 

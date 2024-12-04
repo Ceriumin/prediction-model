@@ -1,6 +1,6 @@
-from load_data import DataLoader
+from data import DataLoader
 from model import Model
-from visualization import Visualize
+from evaluate import Visualize
 
 '''Linear Regression Model'''
 def linear(X_train, Y_train, X_test, Y_test, visualize):
@@ -9,7 +9,11 @@ def linear(X_train, Y_train, X_test, Y_test, visualize):
 
     model.train(X_train, Y_train)
     model.evaluate(X_test, Y_test, name)
-    visualize.plot_scatter(Y_test, model.predict(X_test), name)
+    score = model.cross_validate(model.model, X_train, Y_train)
+
+    visualize.scatter(name, Y_test, model.predict(X_test))
+    visualize.validation(score, name)
+    visualize.residual(name, Y_test, model.predict(X_test))
 
 '''Random Forest Regressor Ensemble'''
 def forest(X_train, Y_train, X_test, Y_test, visualize):
@@ -27,9 +31,11 @@ def forest(X_train, Y_train, X_test, Y_test, visualize):
     tuned.train(X_train, Y_train)
 
     model.evaluate(X_test, Y_test, name)
-    # visualize.plot_scatter(Y_test, rf_model.predict(X_test))
-    # feature_names = X_train.columns.tolist()
-    # visualize.plot_importance(rf_model.model, feature_names)
+    score = model.cross_validate(model.model, X_train, Y_train)
+
+    visualize.scatter(name, Y_test, model.predict(X_test))
+    visualize.validation(score, name)
+    visualize.residual(name, Y_test, model.predict(X_test))
 
 '''XGBoost Gradient Regressor Ensemble'''
 def xg(X_train, Y_train, X_test, Y_test, visualize):
@@ -38,9 +44,11 @@ def xg(X_train, Y_train, X_test, Y_test, visualize):
     model.train(X_train, Y_train)
 
     model.evaluate(X_test, Y_test, name)
-    visualize.plot_scatter(Y_test, model.predict(X_test))
-    # feature_names = X_train.columns.tolist()
-    # visualize.plot_importance(xgb_model.model, feature_names)
+    score = model.cross_validate(model.model, X_train, Y_train)
+
+    visualize.scatter(name, Y_test, model.predict(X_test))
+    visualize.validation(score, name)
+    visualize.residual(name, Y_test, model.predict(X_test))
 
 '''Regression Stacking Ensemble'''
 def stack(X_train, Y_train, X_test, Y_test, visualize):
@@ -49,7 +57,11 @@ def stack(X_train, Y_train, X_test, Y_test, visualize):
     model.train(X_train, Y_train)
 
     model.evaluate(X_test, Y_test, name)
-    visualize.plot_scatter(Y_test, model.predict(X_test))
+    score = model.cross_validate(model.model, X_train, Y_train)
+
+    visualize.scatter(name, Y_test, model.predict(X_test))
+    visualize.validation(score, name)
+    visualize.residual(name, Y_test, model.predict(X_test))
 
 '''Keras Neural Network'''
 def neural(X_train, Y_train, X_test, Y_test, visualize):
@@ -58,7 +70,10 @@ def neural(X_train, Y_train, X_test, Y_test, visualize):
     model.model.fit(X_train, Y_train, epochs=100, batch_size=32, validation_data=(X_test, Y_test), verbose=0)
 
     model.evaluate(X_test, Y_test, name)
-    visualize.plot_scatter(Y_test, model.predict(X_test))
+    # model.cross_validate(model.model, X_train, Y_train)
+
+    visualize.scatter(name, Y_test, model.predict(X_test))
+    visualize.residual(name, Y_test, model.predict(X_test))
 
 def main():
     filepath = '../data/data.csv'
