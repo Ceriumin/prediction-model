@@ -49,12 +49,14 @@ class Model:
         return self.model.predict(X_test)
 
 
-    def evaluate(self, X_test, Y_test):
+    def evaluate(self, X_test, Y_test, model):
         Y_pred = self.predict(X_test)
         mse = mean_squared_error(Y_test, Y_pred)
         mae = mean_absolute_error(Y_test, Y_pred)
         r2 = r2_score(Y_test, Y_pred)
-        return mse, r2, mae
+
+        print(f"\n\033[1;4m{model} Evaluation\033[0m")
+        print(f"\nR2 Score: {r2} \nMean Squared Error: {mse}\nMean Absolute Error: {mae}")
 
     def tune_hyperparameters(self, X_train, Y_train, param_grid):
         grid_search = GridSearchCV(self.model, param_grid, cv=5, scoring='r2')
