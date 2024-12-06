@@ -2,6 +2,8 @@ from data import DataLoader
 from model import Model
 from evaluate import Visualize
 
+# Everything here runs all the methods together in sequence
+
 '''Linear Regression Model'''
 def linear(X_train, Y_train, X_test, Y_test, visualize):
     name = "Linear Regression"
@@ -36,6 +38,7 @@ def forest(X_train, Y_train, X_test, Y_test, visualize):
     visualize.scatter(name, Y_test, model.predict(X_test))
     visualize.validation(score, name)
     visualize.residual(name, Y_test, model.predict(X_test))
+    visualize.importance(model.model, name, X_train.columns.tolist())
 
 '''XGBoost Gradient Regressor Ensemble'''
 def xg(X_train, Y_train, X_test, Y_test, visualize):
@@ -49,6 +52,7 @@ def xg(X_train, Y_train, X_test, Y_test, visualize):
     visualize.scatter(name, Y_test, model.predict(X_test))
     visualize.validation(score, name)
     visualize.residual(name, Y_test, model.predict(X_test))
+    visualize.importance(model.model, name, X_train.columns.tolist())
 
 '''Regression Stacking Ensemble'''
 def stack(X_train, Y_train, X_test, Y_test, visualize):
@@ -63,17 +67,17 @@ def stack(X_train, Y_train, X_test, Y_test, visualize):
     visualize.validation(score, name)
     visualize.residual(name, Y_test, model.predict(X_test))
 
-'''Keras Neural Network'''
+'''Keras Neural Network'''  # Experiemntal Model to see what would happen
 def neural(X_train, Y_train, X_test, Y_test, visualize):
     name = "Neural Network"
     model = Model(model_type='keras')
     model.model.fit(X_train, Y_train, epochs=100, batch_size=32, validation_data=(X_test, Y_test), verbose=0)
 
     model.evaluate(X_test, Y_test, name)
+    # Cross Validation Unavailable :(
     # model.cross_validate(model.model, X_train, Y_train)
 
     visualize.scatter(name, Y_test, model.predict(X_test))
-    visualize.residual(name, Y_test, model.predict(X_test))
 
 def main():
     filepath = '../data/data.csv'
@@ -88,6 +92,7 @@ def main():
 
     viz = Visualize()
 
+    # Runs all the models, both trains them and runs predictions + evaluations for convenience
     linear(X_train, Y_train, X_test, Y_test, viz)
     forest(X_train, Y_train, X_test, Y_test, viz)
     xg(X_train, Y_train, X_test, Y_test, viz)

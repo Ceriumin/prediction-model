@@ -10,8 +10,8 @@ from tensorflow import keras
 from tensorflow.keras import layers
 
 from xgboost import XGBRegressor
-from evaluate import Visualize
 
+'''This Class handles all the model processing and training'''
 class Model:
     # Returns the model based off the input provided for simplicity and any parameters
     def __init__(self, model_type='linear', params=None):
@@ -37,7 +37,7 @@ class Model:
         # Neural Network with preset parameters, 64 seems to be the most optimized value for density
         elif model_type == 'keras':
             self.model = keras.Sequential([
-                layers.Input(shape=(9,)),
+                layers.Input(shape=(6,)),
                 layers.Dense(64, activation='relu'),
                 layers.Dense(1)
             ])
@@ -59,6 +59,7 @@ class Model:
         mae = mean_absolute_error(Y_test, Y_pred)
         r2 = r2_score(Y_test, Y_pred)
 
+        # Fancy formatting just to make it look nicer on the eyes
         print(f"\n\033[1;4m{model} Evaluation\033[0m")
         print(f"\nR2 Score: {r2} \nMean Squared Error: {mse}\nMean Absolute Error: {mae}")
 
@@ -69,11 +70,13 @@ class Model:
         self.model = grid_search.best_estimator_
         return grid_search.best_params_
 
+    # Function for running cross validation
     def cross_validate(self, model, X, Y):
         scores = cross_val_score(model, X, Y, cv=10, scoring='r2')
         mean = scores.mean()
         std = scores.std()
 
+        # This is usually ran after the evaluation anyways
         print(f"Cross Validation: {mean}\nStandard Deviation: {std}")
         return scores
 

@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-
+'''This class contains all the diagrams and graph layouts which can be executed'''
 class Visualize:
-
 
     # Scatter diagram suggesting predicted values against actual values of the dataset
     def scatter(self, name, actual, predicted):
@@ -31,6 +30,7 @@ class Visualize:
         plt.tight_layout
         plt.show()
 
+    # Cross validation results diagram
     def validation(self, scores, name):
         plt.figure(figsize=(10, 6))
         plt.plot(range(1, len(scores) + 1), scores, marker='o', linestyle='-', color='blue', label='Validation Score')
@@ -44,6 +44,7 @@ class Visualize:
         plt.grid(True)
         plt.show()
 
+    # Residual Plot diagram
     def residual(self, name, actual, predicted):
         residuals = actual - predicted
 
