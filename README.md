@@ -1,3 +1,3 @@
 # Poland
 
-Scream if you love poland
+WHAT THE FUCK IS A MILE 🦅🦅🦅🦅🦅 WHAT THE FUCK IS A STABLE GOVERNMENT 🦅🦅🦅🦅🦅🦅🇵🇱🇵🇱🇵🇱🇵🇱🇵🇱🇵🇱🇵🇱🇵🇱🇵🇱
